@@ -19,8 +19,14 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ozz.demo.date.DateFormatDemo;
+import com.ozz.demo.encrypt.DigestDemo;
+import com.ozz.demo.path.PathDemo;
+
 public class FileTools {
   private Logger log = LoggerFactory.getLogger(getClass());
+  
+  private DigestDemo digestDemo;
 
   public List<List<String>> findRepeatFileInFolder(String folderPath)
       throws FileNotFoundException, IOException {
@@ -50,7 +56,7 @@ public class FileTools {
     for (Path root : roots) {
       Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
         private int count = 0;
-        private DateFormatUtil dateFormatUtil = new DateFormatUtil();
+        private DateFormatDemo dateFormatUtil = new DateFormatDemo();
 
         @Override
         public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
