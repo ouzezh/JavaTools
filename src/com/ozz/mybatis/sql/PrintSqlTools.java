@@ -2,6 +2,7 @@ package com.ozz.mybatis.sql;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +12,10 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-public class PrintSql {
+/**
+ * 根据日志打印出带参数的SQL
+ */
+public class PrintSqlTools {
   private String sqlPrefix = "==>  Preparing:";
   private String paramPrefix = "==> Parameters:";
   private String sqlPattern = "\\?";
@@ -34,7 +38,7 @@ public class PrintSql {
 
   public void printSql() throws IOException {
     String filePath = getClass().getResource("sql.log").getPath();
-    List<String> lines = FileUtils.readLines(new File(filePath), "UTF-8");
+    List<String> lines = FileUtils.readLines(new File(filePath), StandardCharsets.UTF_8);
 
     Pattern sqlP = Pattern.compile(sqlPattern);
     for (int i = 0; i < lines.size() - 1; i++) {

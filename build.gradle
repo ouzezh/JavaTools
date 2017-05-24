@@ -7,7 +7,7 @@ tasks.withType(JavaCompile) {
 
 sourceCompatibility = 1.8
 jar {
-    baseName='ouzezh-utils'
+    baseName='ouzezh-tools'
     version='0.1'
 }
 
@@ -24,6 +24,9 @@ repositories {
 
 dependencies {
 	compile("commons-io:commons-io:+")
+	compile("org.slf4j:slf4j-api:+")
+	
+    compile fileTree(dir: 'libs', include: '*.jar')
     //providedCompile
     testCompile("junit:junit:+")
 }
