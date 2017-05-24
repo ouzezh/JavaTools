@@ -1,0 +1,29 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+tasks.withType(JavaCompile) {
+	options.encoding = "UTF-8"
+}
+
+sourceCompatibility = 1.8
+jar {
+    baseName='ouzezh-utils'
+    version='0.1'
+}
+
+repositories {
+    maven { url "http://maven.aliyun.com/nexus/content/repositories/central" }
+    maven { url "https://repo.spring.io/libs-release" }
+  	maven { url "https://code.lds.org/nexus/content/groups/main-repo" }
+    maven { url "http://repo.spring.io/snapshot" }
+    maven { url "http://repo.spring.io/milestone" }
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+	compile("commons-io:commons-io:+")
+    //providedCompile
+    testCompile("junit:junit:+")
+}
