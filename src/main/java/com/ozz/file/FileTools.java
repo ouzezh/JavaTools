@@ -25,7 +25,7 @@ import com.ozz.demo.path.PathDemo;
 
 public class FileTools {
   private Logger log = LoggerFactory.getLogger(getClass());
-  
+
   private DigestDemo digestDemo;
 
   public List<List<String>> findRepeatFileInFolder(String folderPath)
@@ -103,8 +103,32 @@ public class FileTools {
    * 
    * 作用：制作eclipse的links插件
    */
-  public void copyDifferentFiles(String folder, String compareFolder, String toFolder) {
+  public void copyDifferentFiles(String folder, String compareFolder, String toFolder)
+      throws IOException {
     // TODO
+    long startTime = System.currentTimeMillis();
+    Path root = Paths.get(folder);
+    Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
+      private int count = 0;
+      private DateFormatDemo dateFormatUtil = new DateFormatDemo();
+
+      @Override
+      public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+        // System.out.println(path.toString());
+        count++;
+        String digest = digestDemo.digest(path);
+        LoggerFactory.getLogger(PathDemo.class).info("scan " + count
+                                                     + " "
+                                                     + dateFormatUtil.getTimeStringByMillis(System.currentTimeMillis()
+                                                                                            - startTime)
+                                                     + " "
+                                                     + path.toString());
+        if(Files.exists(path)) {
+          ;
+        }
+        return FileVisitResult.CONTINUE;
+      }
+    });
   }
 }
 

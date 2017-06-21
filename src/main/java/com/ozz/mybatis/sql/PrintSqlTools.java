@@ -82,7 +82,7 @@ public class PrintSqlTools {
         temp = temp + item;
       }
 
-      boolean flag = temp.endsWith("(String)");
+      boolean flag = temp.endsWith("(String)") || temp.endsWith("(Timestamp)");
       if (flag || temp.matches(".*" + endRegex) || nullRegex.equals(temp)) {
         System.out.print(temp);
         temp = temp.replaceFirst(endRegex, "");
