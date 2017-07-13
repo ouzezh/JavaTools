@@ -16,12 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ozz.demo.date.DateFormatDemo;
 import com.ozz.demo.encrypt.DigestDemo;
-import com.ozz.demo.path.PathDemo;
 
 public class FileTools {
   private Logger log = LoggerFactory.getLogger(getClass());
@@ -63,7 +63,7 @@ public class FileTools {
           // System.out.println(path.toString());
           count++;
           String digest = digestDemo.digest(path);
-          LoggerFactory.getLogger(PathDemo.class).info("scan " + count
+          log.info("scan " + count
                                                        + " "
                                                        + dateFormatUtil.getTimeStringByMillis(System.currentTimeMillis()
                                                                                               - startTime)
@@ -98,33 +98,47 @@ public class FileTools {
     return res;
   }
 
+  @Test
+  public void test() throws IOException {
+    try {
+      copyDifferentFiles("D:/Develop/tools/eclipse_copy", "D:/Develop/tools/eclipse", "C:/Users/ouzezhou/Desktop/test", "configuration");
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw e;
+    }
+  }
+
   /**
    * 拷贝两个文件夹中不同的文件到指定文件夹
    * 
    * 作用：制作eclipse的links插件
    */
-  public void copyDifferentFiles(String folder, String compareFolder, String toFolder)
+  public void copyDifferentFiles(String folder, String compareFolder, String toFolder, String... ignoreFiles)
       throws IOException {
-    // TODO
-    long startTime = System.currentTimeMillis();
     Path root = Paths.get(folder);
+    Path compareRoot = Paths.get(compareFolder);
+    Path toRoot = Paths.get(toFolder);
+    List<Path> ignorePaths = new ArrayList<>(ignoreFiles==null?0:ignoreFiles.length);
+    for(String ignoreFile : ignoreFiles) {
+      ignorePaths.add(Paths.get(ignoreFile));
+    }
+    
     Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
-      private int count = 0;
-      private DateFormatDemo dateFormatUtil = new DateFormatDemo();
-
       @Override
       public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
-        // System.out.println(path.toString());
-        count++;
-        String digest = digestDemo.digest(path);
-        LoggerFactory.getLogger(PathDemo.class).info("scan " + count
-                                                     + " "
-                                                     + dateFormatUtil.getTimeStringByMillis(System.currentTimeMillis()
-                                                                                            - startTime)
-                                                     + " "
-                                                     + path.toString());
-        if(Files.exists(path)) {
-          ;
+        Path relativeze = root.relativize(path);
+        for(Path ignorePath : ignorePaths) {
+          if(relativeze.startsWith(ignorePath) || path.startsWith(ignorePath)) {
+            return FileVisitResult.CONTINUE;
+          }
+        }
+        
+        Path comparePath = compareRoot.resolve(relativeze);
+        if(!Files.exists(comparePath)) {
+          log.info("copy: " + relativeze.toString());
+          Path toPath = toRoot.resolve(relativeze);
+          Files.createDirectories(toPath.getParent());
+          Files.copy(path, toPath);
         }
         return FileVisitResult.CONTINUE;
       }

@@ -24,7 +24,7 @@ repositories {
 
 dependencies {
 	compile("commons-io:commons-io:+")
-	compile("org.slf4j:slf4j-api:+")
+	compile("ch.qos.logback:logback-classic:+")
 	
     compile fileTree(dir: 'libs', include: '*.jar')
     //providedCompile
