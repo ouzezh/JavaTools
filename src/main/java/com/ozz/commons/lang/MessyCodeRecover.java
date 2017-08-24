@@ -4,8 +4,8 @@ import java.io.UnsupportedEncodingException;
 
 public class MessyCodeRecover {
   public static void main(String[] args) throws UnsupportedEncodingException {
-     new MessyCodeRecover().recover("浣犲ソ");
-//    System.out.println(isEnglishOrChinese("中国人abcDEF（；(,。"));
+    new MessyCodeRecover().recover("浣犲ソ");
+    // System.out.println(isEnglishOrChinese("中国人abcDEF（；(,。"));
   }
 
   /**
@@ -28,15 +28,11 @@ public class MessyCodeRecover {
         if (i != j) {
           String s = new String(str.getBytes(charsets[i]), charsets[j]);
 
-          if (isEnglishOrChinese(s)) {
-            System.out.println("----原编码为" + charsets[j] + ",被误读为" + charsets[i]);
-            System.out.println(s);
-            System.out.println();
-          } else {
-             System.out.println("skip " + charsets[j] + " -> " + charsets[i]);
-             System.out.println(s);
-             System.out.println();
-          }
+          // if (isEnglishOrChinese(s)) {
+          System.out.println("----反编译编码" + charsets[i] + ",编译编码" + charsets[j]);
+          System.out.println(s);
+          System.out.println();
+          // }
         }
       }
     }
