@@ -143,6 +143,7 @@ public class FileTools {
         return FileVisitResult.CONTINUE;
       }
     });
+    System.out.println("--End--");
   }
 }
 
