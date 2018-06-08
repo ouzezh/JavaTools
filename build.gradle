@@ -28,10 +28,10 @@ repositories {
 }
 
 dependencies {
-	compile("commons-io:commons-io")
-	compile("ch.qos.logback:logback-classic")
+	compile("commons-io:commons-io:+")
+	compile("ch.qos.logback:logback-classic:+")
 	
     compile fileTree(dir: 'libs', include: '*.jar')
     //providedCompile
-    testCompile("junit:junit")
+    testCompile("junit:junit:+")
 }
