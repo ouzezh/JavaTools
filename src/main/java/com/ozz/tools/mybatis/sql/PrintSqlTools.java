@@ -1,4 +1,4 @@
-package com.ozz.mybatis.sql;
+package com.ozz.tools.mybatis.sql;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.ozz.commons.lang;
+package com.ozz.tools.commons.lang;
 
 import java.io.UnsupportedEncodingException;
 

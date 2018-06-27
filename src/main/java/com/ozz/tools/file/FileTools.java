@@ -1,4 +1,4 @@
-package com.ozz.file;
+package com.ozz.tools.file;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.ozz.demo.date.DateFormatDemo;
-import com.ozz.demo.encrypt.DigestDemo;
+import com.ozz.demo.security.encrypt.digest.DigestDemo;
 
 public class FileTools {
   private Logger log = LoggerFactory.getLogger(getClass());
