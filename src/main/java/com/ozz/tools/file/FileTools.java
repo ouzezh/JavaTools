@@ -101,7 +101,7 @@ public class FileTools {
   @Test
   public void test() throws IOException {
     try {
-      copyDifferentFiles("D:/Develop/tools/eclipse_copy", "D:/Develop/tools/eclipse", "C:/Users/ouzezhou/Desktop/test", "configuration");
+      copyDifferentFiles("D:/Develop/tools/eclipse2/eclipse", "D:/Develop/tools/eclipse", "D:/Develop/tools/temp/eclipse", "configuration", "p2");
     } catch (Exception e) {
       e.printStackTrace();
       throw e;
@@ -143,6 +143,7 @@ public class FileTools {
         return FileVisitResult.CONTINUE;
       }
     });
+    System.out.println("--End--");
   }
 }
 

@@ -62,7 +62,7 @@ public class PrintSqlTools {
         }
 
         System.out.println();
-        System.out.println(sql);
+        System.out.println(sql+";");
         System.out.println("----\r\n\r\n");
       }
     }
