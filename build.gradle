@@ -12,7 +12,7 @@ tasks.withType(JavaCompile) {
 
 sourceCompatibility = 1.8
 jar {
-    baseName='ouzezh-tools'
+    baseName='Target'
     version='0.1'
 }
 
