@@ -115,6 +115,7 @@ public class FileTools {
    */
   public void copyDifferentFiles(String folder, String compareFolder, String toFolder, String... ignoreFiles)
       throws IOException {
+    System.out.println("--Start--");
     Path root = Paths.get(folder);
     Path compareRoot = Paths.get(compareFolder);
     Path toRoot = Paths.get(toFolder);
