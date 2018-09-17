@@ -101,7 +101,7 @@ public class FileTools {
   @Test
   public void test() throws IOException {
     try {
-      copyDifferentFiles("D:/Develop/tools/eclipse2/eclipse", "D:/Develop/tools/eclipse", "D:/Develop/tools/temp/eclipse", "configuration", "p2");
+      copyDifferentFiles("D:/Develop/tools/eclipse2/eclipse", "D:/Develop/tools/eclipse", "D:/Develop/tools/eclipse2/tmp", "configuration", "p2");
     } catch (Exception e) {
       e.printStackTrace();
       throw e;
