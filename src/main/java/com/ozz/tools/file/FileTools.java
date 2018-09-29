@@ -101,7 +101,7 @@ public class FileTools {
   @Test
   public void test() throws IOException {
     try {
-      copyDifferentFiles("D:/Develop/tools/eclipse2/eclipse", "D:/Develop/tools/eclipse", "D:/Develop/tools/eclipse2/tmp", "configuration", "p2");
+      copyDifferentFiles("D:/Develop/tools/eclipse2/eclipse", "D:/Develop/tools/eclipse", "D:/Develop/tools/eclipse2/tmp", true, "configuration", "p2");
     } catch (Exception e) {
       e.printStackTrace();
       throw e;
@@ -113,7 +113,7 @@ public class FileTools {
    * 
    * 作用：制作eclipse的links插件
    */
-  public void copyDifferentFiles(String folder, String compareFolder, String toFolder, String... ignoreFiles)
+  public void copyDifferentFiles(String folder, String compareFolder, String toFolder, boolean deleteDiff, String... ignoreFiles)
       throws IOException {
     System.out.println("--Start--");
     Path root = Paths.get(folder);
@@ -136,10 +136,15 @@ public class FileTools {
         
         Path comparePath = compareRoot.resolve(relativeze);
         if(!Files.exists(comparePath)) {
-          log.info("copy: " + relativeze.toString());
           Path toPath = toRoot.resolve(relativeze);
           Files.createDirectories(toPath.getParent());
-          Files.copy(path, toPath);
+          if(deleteDiff) {
+            log.info("move: " + relativeze.toString());
+            Files.move(path, toPath);
+          } else {
+            log.info("copy: " + relativeze.toString());
+            Files.copy(path, toPath);
+          }
         }
         return FileVisitResult.CONTINUE;
       }
