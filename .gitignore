@@ -21,3 +21,6 @@ hs_err_pid*
 /libs/
 
 rebel.xml
+/.idea/
+/gradlew
+/gradlew.bat
