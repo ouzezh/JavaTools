@@ -15,12 +15,9 @@ hs_err_pid*
 /.classpath
 /.project
 /.gradle/
-/gradle/
 /bin/
 /logs/
 /libs/
 
 rebel.xml
 /.idea/
-/gradlew
-/gradlew.bat
