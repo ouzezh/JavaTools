@@ -8,9 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
 
 /**
  * 根据日志打印出带参数的SQL
@@ -26,45 +24,43 @@ public class PrintSqlTools {
   // private String paramPattern =
   // "([^"+paramSplitLeft+paramSplitRigth+"]*)"+paramSplitLeft+"([^"+paramSplitLeft+paramSplitRigth+"]+)"+paramSplitRigth;
 
-  @Test
-  public void test() throws IOException {
-    try {
-      printSql();
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw e;
-    }
+  public static void main(String[] args) {
+    new PrintSqlTools().printSql();
   }
 
-  public void printSql() throws IOException {
-    String filePath = getClass().getResource("sql.log").getPath();
-    List<String> lines = FileUtils.readLines(new File(filePath), StandardCharsets.UTF_8);
+  public void printSql() {
+    try {
+      String filePath = getClass().getResource("sql.log").getPath();
+      List<String> lines = FileUtils.readLines(new File(filePath), StandardCharsets.UTF_8);
 
-    Pattern sqlP = Pattern.compile(sqlPattern);
-    for (int i = 0; i < lines.size() - 1; i++) {
-      String sqlStr = lines.get(i);
-      String paramStr = lines.get(i + 1);
-      if (sqlStr.contains(sqlPrefix) && paramStr.contains(paramStr)) {
-        sqlStr = sqlStr.replaceFirst("^.*" + sqlPrefix, "").trim();
-        paramStr = paramStr.replaceFirst("^.*" + paramPrefix, "").trim();
+      Pattern sqlP = Pattern.compile(sqlPattern);
+      for (int i = 0; i < lines.size() - 1; i++) {
+        String sqlStr = lines.get(i);
+        String paramStr = lines.get(i + 1);
+        if (sqlStr.contains(sqlPrefix) && paramStr.contains(paramStr)) {
+          sqlStr = sqlStr.replaceFirst("^.*" + sqlPrefix, "").trim();
+          paramStr = paramStr.replaceFirst("^.*" + paramPrefix, "").trim();
 
-        System.out.println(sqlStr);
-        System.out.println(paramStr);
-        System.out.println();
+          System.out.println(sqlStr);
+          System.out.println(paramStr);
+          System.out.println();
 
-        List<String> paramList = parseParam(paramStr);
+          List<String> paramList = parseParam(paramStr);
 
-        Matcher sm = sqlP.matcher(sqlStr);
-        Iterator<String> it = paramList.iterator();
-        String sql = sqlStr;
-        while (sm.find() && it.hasNext()) {
-          sql = sql.replaceFirst("\\?", it.next());
+          Matcher sm = sqlP.matcher(sqlStr);
+          Iterator<String> it = paramList.iterator();
+          String sql = sqlStr;
+          while (sm.find() && it.hasNext()) {
+            sql = sql.replaceFirst("\\?", it.next());
+          }
+
+          System.out.println();
+          System.out.println(sql+";");
+          System.out.println("----\r\n\r\n");
         }
-
-        System.out.println();
-        System.out.println(sql+";");
-        System.out.println("----\r\n\r\n");
       }
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 

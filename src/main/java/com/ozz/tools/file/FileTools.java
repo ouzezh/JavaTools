@@ -1,5 +1,7 @@
 package com.ozz.tools.file;
 
+import com.ozz.demo.date.DateUtil;
+import com.ozz.demo.security.encrypt.digest.DigestUtil;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -16,24 +18,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.ozz.demo.date.DateFormatDemo;
-import com.ozz.demo.security.encrypt.digest.DigestDemo;
-
 public class FileTools {
-  private Logger log = LoggerFactory.getLogger(getClass());
+  public static void main(String[] args) {
+    copyDifferentFiles("D:/Dev/tools/eclipse2/eclipse", "D:/Dev/tools/eclipse",
+        "D:/Dev/tools/eclipse2/tmp", true, "configuration", "p2");
+  }
 
-  private DigestDemo digestDemo;
-
-  public List<List<String>> findRepeatFileInFolder(String folderPath)
+  public static List<List<String>> findRepeatFileInFolder(String folderPath)
       throws FileNotFoundException, IOException {
     return findRepeatFileInFolder(Collections.singleton(folderPath));
   }
 
-  public List<List<String>> findRepeatFileInFolder(Collection<String> folderPaths)
+  public static List<List<String>> findRepeatFileInFolder(Collection<String> folderPaths)
       throws FileNotFoundException, IOException {
     /*
      * valid
@@ -56,19 +52,15 @@ public class FileTools {
     for (Path root : roots) {
       Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
         private int count = 0;
-        private DateFormatDemo dateFormatUtil = new DateFormatDemo();
 
         @Override
         public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
           // System.out.println(path.toString());
           count++;
-          String digest = digestDemo.digest(path);
-          log.info("scan " + count
-                                                       + " "
-                                                       + dateFormatUtil.getTimeStringByMillis(System.currentTimeMillis()
-                                                                                              - startTime)
-                                                       + " "
-                                                       + path.toString());
+          String digest = DigestUtil.digest(path);
+          System.out.println(String.format("scan %s %s %s", count,
+              DateUtil.getTimeStringByMillis(System.currentTimeMillis() - startTime),
+              path.toString()));
           if (!mapOfMd5.containsKey(digest)) {
             mapOfMd5.put(digest, new ArrayList<String>());
           }
@@ -92,20 +84,10 @@ public class FileTools {
         }
       }
     }
-    log.info(sb.append("\n\nRepeat Files end").toString());
+    System.out.println(sb.append("\n\nRepeat Files end").toString());
 
     System.out.println("--End--");
     return res;
-  }
-
-  @Test
-  public void test() throws IOException {
-    try {
-      copyDifferentFiles("D:/Dev/tools/eclipse2/eclipse", "D:/Dev/tools/eclipse", "D:/Dev/tools/eclipse2/tmp", true, "configuration", "p2");
-    } catch (Exception e) {
-      e.printStackTrace();
-      throw e;
-    }
   }
 
   /**
@@ -113,43 +95,46 @@ public class FileTools {
    * 
    * 作用：制作eclipse的links插件
    */
-  public void copyDifferentFiles(String folder, String compareFolder, String toFolder, boolean deleteDiff, String... ignoreFiles)
-      throws IOException {
-    System.out.println("--Start--");
-    Path root = Paths.get(folder);
-    Path compareRoot = Paths.get(compareFolder);
-    Path toRoot = Paths.get(toFolder);
-    List<Path> ignorePaths = new ArrayList<>(ignoreFiles==null?0:ignoreFiles.length);
-    for(String ignoreFile : ignoreFiles) {
-      ignorePaths.add(Paths.get(ignoreFile));
-    }
-    
-    Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
-      @Override
-      public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
-        Path relativeze = root.relativize(path);
-        for(Path ignorePath : ignorePaths) {
-          if(relativeze.startsWith(ignorePath) || path.startsWith(ignorePath)) {
-            return FileVisitResult.CONTINUE;
-          }
-        }
-        
-        Path comparePath = compareRoot.resolve(relativeze);
-        if(!Files.exists(comparePath)) {
-          Path toPath = toRoot.resolve(relativeze);
-          Files.createDirectories(toPath.getParent());
-          if(deleteDiff) {
-            log.info("move: " + relativeze.toString());
-            Files.move(path, toPath);
-          } else {
-            log.info("copy: " + relativeze.toString());
-            Files.copy(path, toPath);
-          }
-        }
-        return FileVisitResult.CONTINUE;
+  public static void copyDifferentFiles(String folder, String compareFolder, String toFolder, boolean deleteDiff, String... ignoreFiles) {
+    try {
+      System.out.println("--Start--");
+      Path root = Paths.get(folder);
+      Path compareRoot = Paths.get(compareFolder);
+      Path toRoot = Paths.get(toFolder);
+      List<Path> ignorePaths = new ArrayList<>(ignoreFiles==null?0:ignoreFiles.length);
+      for(String ignoreFile : ignoreFiles) {
+        ignorePaths.add(Paths.get(ignoreFile));
       }
-    });
-    System.out.println("--End--");
+
+      Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
+        @Override
+        public FileVisitResult visitFile(Path path, BasicFileAttributes attrs) throws IOException {
+          Path relativeze = root.relativize(path);
+          for(Path ignorePath : ignorePaths) {
+            if(relativeze.startsWith(ignorePath) || path.startsWith(ignorePath)) {
+              return FileVisitResult.CONTINUE;
+            }
+          }
+
+          Path comparePath = compareRoot.resolve(relativeze);
+          if(!Files.exists(comparePath)) {
+            Path toPath = toRoot.resolve(relativeze);
+            Files.createDirectories(toPath.getParent());
+            if(deleteDiff) {
+              System.out.println("move: " + relativeze.toString());
+              Files.move(path, toPath);
+            } else {
+              System.out.println("copy: " + relativeze.toString());
+              Files.copy(path, toPath);
+            }
+          }
+          return FileVisitResult.CONTINUE;
+        }
+      });
+      System.out.println("--End--");
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
 
