@@ -15,7 +15,7 @@ public class DbVisualizerPwd {
 
     public static void main(String args[]) throws GeneralSecurityException {
         System.out.println(encrypt("password", paramString2));
-        System.out.println(decrypt("AK+fe8JpLKE2kLaW6+Z31g==", "qinda"));
+        System.out.println(decrypt("AK+fe8JpLKE2kLaW6+Z31g==", paramString2));
     }
 
     public static String encrypt(String paramString1, String paramString2)
